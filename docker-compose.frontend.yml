@@ -1,0 +1,25 @@
+version: "3.8"
+services:
+  tuxin-login-web:
+    build:
+      context: ../tuxin-login-web
+    container_name: tuxin-login-web
+    ports:
+      - "8000:8000"
+    depends_on:
+      - tuxin-login-server
+    environment:
+      - API_BASE_URL=${LOGIN_API_BASE_URL}
+    command: npm run build && npm run start
+
+  tuxin-admin:
+    build:
+      context: ../tuxin-admin
+    container_name: tuxin-admin
+    ports:
+      - "8001:8001"
+    depends_on:
+      - tuxin-admin-server
+    environment:
+      - API_BASE_URL=${ADMIN_API_BASE_URL}
+    command: npm run build && npm run start

@@ -1,0 +1,36 @@
+version: "3.8"
+services:
+  redis:
+    # 使用最新版本的 Redis 镜像
+    image: redis:latest
+    container_name: tuxin-redis
+    restart: always
+    # 启动 Redis 命令
+    command: redis-server --requirepass ${REDIS_PASSWORD}
+    # 数据卷映射，持久化 Redis 数据，用于 Redis 数据恢复
+    volumes:
+      - redis_data:/data
+    # 映射 Redis 端口
+    ports:
+      - "6379:6379"
+
+  mysql:
+    # 使用 MySQL 8.0 版本的官方镜像
+    image: mysql:8.0
+    container_name: tuxin-mysql
+    restart: always
+    # 设置 MySQL 环境变量
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+    # 数据卷映射
+    volumes:
+      # 数据持久化映射
+      # 将容器内数据映射到本地目录./db/mysql
+      - mysql_data:/var/lib/mysql
+      # 初始化脚本映射
+      # 当持久化数据目录存在数据时，容器启动时不会执行初始化脚本；不存在时，则会执行初始化脚本
+      # 此处将 /docker-entrypoint-initdb.d 映射到本地目录 ./db/mysql_init
+      - mysql_init:/docker-entrypoint-initdb.d
+    # 映射 MySQL 端口
+    ports:
+      - 3306:3306

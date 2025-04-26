@@ -1,0 +1,37 @@
+version: "3.8"
+services:
+  tuxin-login-server:
+    build:
+      context: ../tuxin-login-server
+    container_name: tuxin-login-server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - DB_DATABASE=tuxin_login
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - JWT_SECRET=${JWT_SECRET}
+
+  tuxin-admin-server:
+    build:
+      context: ../tuxin-admin-server
+    container_name: tuxin-admin-server
+    ports:
+      - "3001:3001"
+    depends_on:
+      - mysql
+      - redis
+    environment:
+      - DB_DATABASE=tuxin_admin
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_USER=root
+      - DB_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - JWT_SECRET=${JWT_SECRET}

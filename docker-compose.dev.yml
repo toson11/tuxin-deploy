@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  tuxin-login-web:
+    command: npm run dev
+    volumes:
+      # 将本地目录映射到容器目录
+      - ../tuxin-login-web:/app
+
+  tuxin-admin:
+    command: npm run dev
+    volumes:
+      # 将本地目录映射到容器目录
+      - ../tuxin-admin:/app
